@@ -6,16 +6,25 @@ import com.hrbu.aidemo.entity.User;
 import com.hrbu.aidemo.service.IFlightService;
 import com.hrbu.aidemo.service.IUserService;
 import com.hrbu.aidemo.service.OrderService;
+import com.hrbu.aidemo.util.GaoDeRouteService;
+import com.hrbu.aidemo.util.RouteRequest;
+import com.hrbu.aidemo.util.RouteResult;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Component
+/**
+ * @author Say my name
+ */
+@Component("functionTools")
 public class FunctionTools {
+    private static final Logger log = LoggerFactory.getLogger(FunctionTools.class);
     @Autowired
     private OrderService orderService;
     @Autowired

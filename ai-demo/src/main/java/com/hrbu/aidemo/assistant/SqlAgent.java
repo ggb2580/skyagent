@@ -1,25 +1,15 @@
 package com.hrbu.aidemo.assistant;
 
-import dev.langchain4j.service.MemoryId;
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.UserMessage;
-import dev.langchain4j.service.spring.AiService;
-import reactor.core.publisher.Flux;
 
-import static dev.langchain4j.service.spring.AiServiceWiringMode.EXPLICIT;
+import dev.langchain4j.service.SystemMessage;
+import org.springframework.stereotype.Component;
+
 /**
  * @author Say my name
  */
-@AiService(
-        wiringMode = EXPLICIT,
-        streamingChatModel = "myqwenStreamingChatModel",  // 通义千问流式
-        chatModel = "myqwenChatModel",                    // 通义千问非流式
-        chatMemoryProvider = "chatMemoryProvider",
-        tools = {"functionTools","mapTools","databaseQueryTool"},
-        contentRetriever = "contentRetriever")
-public interface QwenAssistant {
-//    @SystemMessage(fromResource = "qwenprompt.txt")
-@SystemMessage("""
+@Component
+public interface SqlAgent {
+    @SystemMessage("""
     你是一个专业的 SQL 查询助手。根据用户的问题，生成正确的 SQL SELECT 语句并调用 queryDatabase 工具。
     
     数据库表结构如下：
@@ -75,6 +65,6 @@ public interface QwenAssistant {
     
     用户问题：{userMessage}
     """)
-    Flux<String> streamChat(@MemoryId Long memoryId, @UserMessage String message);
-    String chat(String message);
+    String chat(String userMessage);
 }
+

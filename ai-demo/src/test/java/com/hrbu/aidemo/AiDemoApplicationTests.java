@@ -1,7 +1,11 @@
 package com.hrbu.aidemo;
 
+
 import com.hrbu.aidemo.assistant.Assistant;
 import com.hrbu.aidemo.assistant.QwenAssistant;
+import dev.langchain4j.community.model.dashscope.QwenChatModel;
+import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,10 +13,13 @@ import reactor.core.publisher.Flux;
 
 @SpringBootTest
 class AiDemoApplicationTests {
+    @Resource
+    private QwenChatModel qwenChatModel;
     @Autowired
     Assistant assistant;
     @Autowired
     QwenAssistant qwenAssistant;
+
     @Test
     public void test(){
 //        String chat = assistant.chat("你是谁啊?");
@@ -29,4 +36,19 @@ class AiDemoApplicationTests {
         System.out.println(chat);
 
     }
+
+    @Test
+    public void test02(){
+        Flux<String> stringFlux = qwenAssistant.streamChat(2L, "我的token用了多少");
+        System.out.println(stringFlux);
+    }
+
+    @Test
+    public void test03(){
+        Flux<String> stringFlux = qwenAssistant.streamChat(3L, "我的token用了多少");
+        stringFlux.doOnNext(System.out::print)
+                .doOnComplete(() -> System.out.println("\n=== 流式回答结束 ==="))
+                .blockLast();
+    }
+
 }
